@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integradora_2.MenuController">
+   <children>
+      <Canvas fx:id="cs2" height="429.0" layoutX="-3.0" layoutY="-8.0" width="608.0" />
+      <Button fx:id="chooser1" layoutX="78.0" layoutY="308.0" mnemonicParsing="false" onAction="#onClick1" prefHeight="57.0" prefWidth="208.0" text="Armado automatico (precio)" textFill="WHITE" />
+      <Button fx:id="recomendation" layoutX="311.0" layoutY="308.0" mnemonicParsing="false" onAction="#onClick2" prefHeight="57.0" prefWidth="208.0" text=" Arma tu pc con ayuda" textFill="WHITE" />
+   </children>
+</AnchorPane>
