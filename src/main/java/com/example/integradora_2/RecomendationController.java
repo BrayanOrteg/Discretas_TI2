@@ -36,27 +36,26 @@ public class RecomendationController implements Initializable{
     @FXML
     private ListView<Node<Integer, Component>> cpuView = new ListView<>();
 
-    private ObservableList<Node<Integer, Component>> cpus;
+
 
     @FXML
     private ListView<Node<Integer, Component>> motherView = new ListView<>();
 
-    private ObservableList<Node<Integer, Component>> motherBoards;
+
 
     @FXML
     private ListView<Node<Integer, Component>> ramView = new ListView<>();
 
-    private ObservableList<Node<Integer, Component>> rams;
+
 
     @FXML
     private ListView<Node<Integer, Component>> gpuView = new ListView<>();
 
-    private ObservableList<Node<Integer, Component>> gpus;
+
 
     @FXML
     private ListView<Node<Integer, Component>> storageView = new ListView<>();
 
-    private ObservableList<Node<Integer, Component>> storages;
 
 
 
@@ -65,22 +64,45 @@ public class RecomendationController implements Initializable{
     private  ObservableList<Node<Integer, Component>> result;
 
 
+  @FXML
+  private Label cpuLabel,boardLabel,ramLabel, gpuLabel, storageLabel, priceLabel;
+
+    @FXML
+    private Canvas canvas;
+
+    private GraphicsContext gc;
 
 
     private int status;
 
 
     @FXML
-    private Button finishButton ;
+    private Button finishButton, restartButton ;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
 
+        gc= canvas.getGraphicsContext2D();
+        gc.setFill(Color.GREY);
+        gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+
 
         status=0;
 
         finishButton.setStyle("-fx-padding: 8 15 15 15;\n" +
+                "    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;\n" +
+                "    -fx-background-radius: 8;\n" +
+                "    -fx-background-color:\n" +
+                "    linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),\n" +
+                "        #9d4024,\n" +
+                "                #d86e3a,\n" +
+                "    radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c);\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-font-size: 1.1em;");
+
+        restartButton.setStyle("-fx-padding: 8 15 15 15;\n" +
                 "    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;\n" +
                 "    -fx-background-radius: 8;\n" +
                 "    -fx-background-color:\n" +
@@ -99,7 +121,7 @@ public class RecomendationController implements Initializable{
 
         System.out.println("Hola");
 
-        init(cpuView, ComponentType.CPU, gpus);
+        init(cpuView, ComponentType.CPU);
 
         cpuView.setCellFactory(param -> new ListCell<Node<Integer,Component>>() {
             private ImageView imageView = new ImageView();
@@ -109,7 +131,7 @@ public class RecomendationController implements Initializable{
                 if (empty) {
                     setText(null);
                     setGraphic(null);
-                    setStyle("-fx-background-color: #a0887c");
+                    
                 } else {
                     if(node==cpu){
                         setTextFill(Paint.valueOf("#FF0000"));
@@ -118,7 +140,7 @@ public class RecomendationController implements Initializable{
                         setTextFill(Paint.valueOf("#000000"));
                         setText(node.getObject().getName() + "\n" + node.getObject().getPrice());
                     }
-                    setStyle("-fx-background-color: #a0887c");
+                    
                     imageView.setImage(node.getObject().getImage());
                     imageView.setFitHeight(64);
                     imageView.setFitWidth(64);
@@ -127,7 +149,7 @@ public class RecomendationController implements Initializable{
             }
         });
 
-        init(motherView, ComponentType.MOTHERBOARD, motherBoards);
+        init(motherView, ComponentType.MOTHERBOARD);
 
         motherView.setCellFactory(param -> new ListCell<Node<Integer,Component>>() {
             private ImageView imageView = new ImageView();
@@ -137,7 +159,7 @@ public class RecomendationController implements Initializable{
                 if (empty) {
                     setText(null);
                     setGraphic(null);
-                    setStyle("-fx-background-color: #a0887c");
+                    
                 } else {
                     if(node==motherBoard){
                         setTextFill(Paint.valueOf("#FF0000"));
@@ -146,7 +168,7 @@ public class RecomendationController implements Initializable{
                         setTextFill(Paint.valueOf("#000000"));
                         setText(node.getObject().getName() + "\n" + node.getObject().getPrice());
                     }
-                    setStyle("-fx-background-color: #a0887c");
+                    
                     imageView.setImage(node.getObject().getImage());
                     imageView.setFitHeight(64);
                     imageView.setFitWidth(64);
@@ -155,7 +177,7 @@ public class RecomendationController implements Initializable{
             }
         });
 
-        init(ramView, ComponentType.RAM, rams);
+        init(ramView, ComponentType.RAM);
 
         ramView.setCellFactory(param -> new ListCell<Node<Integer,Component>>() {
             private ImageView imageView = new ImageView();
@@ -165,7 +187,7 @@ public class RecomendationController implements Initializable{
                 if (empty) {
                     setText(null);
                     setGraphic(null);
-                    setStyle("-fx-background-color: #a0887c");
+                    
                 } else {
                     if(node==ram){
                         setTextFill(Paint.valueOf("#FF0000"));
@@ -174,7 +196,7 @@ public class RecomendationController implements Initializable{
                         setTextFill(Paint.valueOf("#000000"));
                         setText(node.getObject().getName() + "\n" + node.getObject().getPrice());
                     }
-                    setStyle("-fx-background-color: #a0887c");
+                    
                     imageView.setImage(node.getObject().getImage());
                     imageView.setFitHeight(64);
                     imageView.setFitWidth(64);
@@ -183,7 +205,7 @@ public class RecomendationController implements Initializable{
             }
         });
 
-        init(gpuView, ComponentType.GPU, gpus);
+        init(gpuView, ComponentType.GPU);
 
         gpuView.setCellFactory(param -> new ListCell<Node<Integer,Component>>() {
             private ImageView imageView = new ImageView();
@@ -193,7 +215,7 @@ public class RecomendationController implements Initializable{
                 if (empty) {
                     setText(null);
                     setGraphic(null);
-                    setStyle("-fx-background-color: #a0887c");
+                    
                 } else {
                     if(node==gpu){
                         setTextFill(Paint.valueOf("#FF0000"));
@@ -202,7 +224,7 @@ public class RecomendationController implements Initializable{
                         setTextFill(Paint.valueOf("#000000"));
                         setText(node.getObject().getName() + "\n" + node.getObject().getPrice());
                     }
-                    setStyle("-fx-background-color: #a0887c");
+                    
                     imageView.setImage(node.getObject().getImage());
                     imageView.setFitHeight(64);
                     imageView.setFitWidth(64);
@@ -211,7 +233,7 @@ public class RecomendationController implements Initializable{
             }
         });
 
-        init(storageView, ComponentType.STORAGE, storages);
+        init(storageView, ComponentType.STORAGE);
 
         storageView.setCellFactory(param -> new ListCell<Node<Integer,Component>>() {
             private ImageView imageView = new ImageView();
@@ -229,7 +251,7 @@ public class RecomendationController implements Initializable{
                         setTextFill(Paint.valueOf("#000000"));
                         setText(node.getObject().getName() + "\n" + node.getObject().getPrice());
                     }
-                    setStyle("-fx-background-color: #a0887c");
+                    
                     imageView.setImage(node.getObject().getImage());
                     imageView.setFitHeight(64);
                     imageView.setFitWidth(64);
@@ -246,48 +268,94 @@ public class RecomendationController implements Initializable{
 
     @FXML
     public void onClickCPU(){
-        cpu = cpuView.getFocusModel().getFocusedItem();
-        filter(cpu, motherView, ComponentType.MOTHERBOARD, motherBoards);
-        filter(cpu, ramView, ComponentType.RAM, rams);
-        filter(cpu, gpuView, ComponentType.GPU, gpus);
-        filter(cpu, storageView, ComponentType.STORAGE, storages);
+       cpu = cpuView.getFocusModel().getFocusedItem();
+
+        if(cpu != null){
+            ArrayList<Node<Integer, Component>> cpuArray = new ArrayList<>();
+            cpuArray.add(cpu);
+            cpuView.setItems(FXCollections.observableArrayList(cpuArray));
+
+            filter(cpu, motherView, ComponentType.MOTHERBOARD);
+            filter(cpu, ramView, ComponentType.RAM);
+            filter(cpu, gpuView, ComponentType.GPU);
+            filter(cpu, storageView, ComponentType.STORAGE);
+        }
     }
 
     @FXML
-    public void onClickMOTHERBOARD(){
+    public void onClickMOTHERBOARD() {
 
         motherBoard = motherView.getFocusModel().getFocusedItem();
-        //filter(motherBoard, cpuView, ComponentType.CPU, cpus);
-        filter(motherBoard, ramView, ComponentType.RAM, rams);
-        filter(motherBoard, gpuView, ComponentType.GPU, gpus);
-        filter(motherBoard, storageView, ComponentType.STORAGE, storages);
+
+        if (motherBoard != null && cpu!=null) {
+            ArrayList<Node<Integer, Component>> boardArray = new ArrayList<>();
+            boardArray.add(motherBoard);
+            motherView.setItems(FXCollections.observableArrayList(boardArray));
+
+            //filter(motherBoard, cpuView, ComponentType.CPU, cpus);
+            filter(motherBoard, ramView, ComponentType.RAM);
+            filter(motherBoard, gpuView, ComponentType.GPU);
+            filter(motherBoard, storageView, ComponentType.STORAGE);
+        }
+
 
     }
 
     @FXML
     public void onClickRAM(){
 
-        ram = ramView.getFocusModel().getFocusedItem();
-        //filter(ram, cpuView, ComponentType.CPU, cpus);
-        //filter(ram, motherView, ComponentType.MOTHERBOARD, motherBoards);
-        filter(ram, gpuView, ComponentType.GPU, gpus);
-        filter(ram, storageView, ComponentType.STORAGE, storages);
+        if(status==0) {
+            ram = ramView.getFocusModel().getFocusedItem();
+
+
+            if (ram != null && motherBoard != null) {
+                ArrayList<Node<Integer, Component>> ramArray = new ArrayList<>();
+                ramArray.add(ram);
+                ramView.setItems(FXCollections.observableArrayList(ramArray));
+
+                //filter(ram, cpuView, ComponentType.CPU, cpus);
+                //filter(ram, motherView, ComponentType.MOTHERBOARD, motherBoards);
+
+                filter(ram, gpuView, ComponentType.GPU);
+                filter(ram, storageView, ComponentType.STORAGE);
+            }
+        }
 
     }
 
     @FXML
     public void onClickGPU(){
         gpu = gpuView.getFocusModel().getFocusedItem();
+
+        if(gpu != null && ram != null){
+            ArrayList<Node<Integer, Component>> gpuArray = new ArrayList<>();
+            gpuArray.add(gpu);
+
+
+            gpuView.setItems(FXCollections.observableArrayList(gpuArray));
+            filter(gpu, storageView, ComponentType.STORAGE);
+        }
+
         //filter(gpu, cpuView, ComponentType.CPU, cpus);
         //filter(gpu, motherView, ComponentType.MOTHERBOARD, motherBoards);
         //filter(gpu, ramView, ComponentType.RAM, rams);
-        filter(gpu, storageView, ComponentType.STORAGE, storages);
+
+
 
     }
 
     @FXML
     public void onClickSTORAGE(){
+
         storage = storageView.getFocusModel().getFocusedItem();
+
+
+        if(storage != null && gpu != null){
+            ArrayList<Node<Integer, Component>> storageArray = new ArrayList<>();
+            storageArray.add(storage);
+            storageView.setItems(FXCollections.observableArrayList(storageArray));
+        }
+
         //filter(storage, cpuView, ComponentType.CPU, cpus);
         //filter(storage, motherView, ComponentType.MOTHERBOARD, motherBoards);
         //filter(storage, ramView, ComponentType.RAM, rams);
@@ -302,6 +370,13 @@ public class RecomendationController implements Initializable{
         motherView.setVisible(false);
         storageView.setVisible(false);
         if(status==0) {
+            cpuLabel.setVisible(false);
+            gpuLabel.setVisible(false);
+            storageLabel.setVisible(false);
+            boardLabel.setVisible(false);
+            ramLabel.setText("Build");
+            restartButton.setVisible(false);
+            status = 1;
             if (cpu != null && motherBoard != null && ram != null && gpu != null && storage != null) {
                 ArrayList<Node<Integer, Component>> components = new ArrayList<>();
                 components.add(cpu);
@@ -312,7 +387,17 @@ public class RecomendationController implements Initializable{
                 result = FXCollections.observableArrayList(components);
 
                 ramView.setItems(result);
-                status = 1;
+
+                int cost = 0;
+                for(int i=0; i<result.size(); i++){
+                    cost+=result.get(i).getObject().getPrice();
+                }
+                priceLabel.setVisible(true);
+                priceLabel.setText("El precio de tu build es de $"+cost);
+
+            }
+            else {
+                ramView.setItems(result);
             }
         }else {
             Stage stage = (Stage) finishButton.getScene().getWindow();
@@ -321,7 +406,7 @@ public class RecomendationController implements Initializable{
         }
     }
 
-    public void init(ListView<Node<Integer,Component>> listView,  ComponentType componentType, ObservableList observableList){
+    public void init(ListView<Node<Integer,Component>> listView,  ComponentType componentType){
         ArrayList<Node<Integer,Component>> filter = new ArrayList<>();
 
         for(Node<Integer,Component> n : componentsGraph.getVertices()){
@@ -336,7 +421,7 @@ public class RecomendationController implements Initializable{
 
     }
 
-    public void filter(Node<Integer,Component> node, ListView<Node<Integer,Component>> listView,  ComponentType componentType, ObservableList observableList){
+    public void filter(Node<Integer,Component> node, ListView<Node<Integer,Component>> listView,  ComponentType componentType){
         ArrayList<Node<Integer,Component>> filter = new ArrayList<>();
 
         for(Node<Integer,Component> n : componentsGraph.BFS(node)){
@@ -349,6 +434,21 @@ public class RecomendationController implements Initializable{
 
         listView.setItems(FXCollections.observableArrayList(filter));
 
+    }
+
+    @FXML
+    public void restart(){
+        init(gpuView, ComponentType.GPU);
+        init(motherView, ComponentType.MOTHERBOARD);
+        init(ramView, ComponentType.RAM);
+        init(cpuView, ComponentType.CPU);
+        init(storageView, ComponentType.STORAGE);
+
+        cpu=null;
+        motherBoard=null;
+        gpu=null;
+        ram=null;
+        storage=null;
     }
 
 }

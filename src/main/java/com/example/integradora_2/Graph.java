@@ -431,6 +431,56 @@ public class Graph<K,T> {
 
     }
 
+    private int[] parents= new int[100];
+
+    public int find(int node){
+
+        if (parents[node]==node){
+            return node;
+        }
+        return find(parents[node]);
+    }
+
+    public void unite(int iNode, int fNode ){
+
+        int parentX=find(iNode);
+        int parentY=find(fNode);
+
+        parents[parentX]=parentY;
+    }
+
+    public int krus(){
+
+        LinkedList <Edge<T,K>> edgesFinal= new LinkedList<>();
+        ArrayList <Edge<T,K>> edges2=new ArrayList<>();
+
+        for(int i=1; i<nodes.size();i++){
+            parents[i]=i;
+        }
+
+        edges2= (ArrayList<Edge<T,K>>) edges.clone();
+
+        Collections.sort(edges2, Comparator.comparing(Edge::getWeight));
+
+        int peso=0;
+        int node1;
+        int node2;
+
+        while(edges2.size()>=1){
+
+            node1= (Integer) edges2.get(0).getStart().getKey();
+            node2= (Integer) edges2.get(0).getEnd().getKey();
+
+            if(find(node1)!=find(node2)){
+                unite(node1,node2);
+                peso+=edges2.get(0).getWeight();
+                edgesFinal.add(edges2.get(0));
+            }
+            edges2.remove(0);
+        }
+        return peso;
+    }
+
     public Node<K,T> getNode(K key){
         return nodes.get(key);
     }
@@ -446,5 +496,8 @@ public class Graph<K,T> {
     public void removeNoneDirectedRelation(Edge<K,T> edge){
         edge.getStart().removeNoneDirectedRelation(edge);
     }
+
+
+
 
 }

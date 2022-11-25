@@ -27,6 +27,8 @@ public class MenuController implements Initializable {
 
 
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gc = cs2.getGraphicsContext2D();
@@ -63,6 +65,8 @@ public class MenuController implements Initializable {
                 "    -fx-font-weight: bold;\n" +
                 "    -fx-font-size: 1.1em;");
 
+
+
     }
 
     @FXML
@@ -80,4 +84,9 @@ public class MenuController implements Initializable {
         HelloApplication.showWindow("recomendationChooser.fxml");
         stage.close();
     }
+
+
+
+
+
 }

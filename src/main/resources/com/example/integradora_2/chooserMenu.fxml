@@ -7,16 +7,20 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.integradora_2.ChooserController">
    <children>
-      <Canvas fx:id="canvas" height="400.0" layoutX="-2.0" width="606.0" />
-      <VBox layoutX="220.0" layoutY="101.0" prefHeight="272.0" prefWidth="205.0">
+      <Canvas fx:id="canvas" height="400.0" layoutX="-2.0" opacity="0.5" width="674.0" />
+      <VBox layoutX="220.0" layoutY="77.0" prefHeight="249.0" prefWidth="205.0">
          <children>
-            <ListView fx:id="componentsView" onMouseClicked="#showInfo" prefHeight="205.0" prefWidth="195.0" style="-fx-background-color: #a0887c;" />
+            <ListView fx:id="componentsView" onMouseClicked="#showInfo" prefHeight="252.0" prefWidth="205.0" style="-fx-background-color: #a0887c;" />
          </children>
       </VBox>
-      <Label fx:id="ComponentName" layoutX="262.0" layoutY="73.0" prefHeight="28.0" prefWidth="122.0" text="Componente" textFill="WHITE">
+      <Label fx:id="ComponentName" layoutX="299.0" layoutY="46.0" prefHeight="33.0" prefWidth="94.0" text="CPU" textFill="WHITE">
          <font>
             <Font name="System Bold" size="19.0" />
          </font></Label>
-      <Button fx:id="nextBttn" layoutX="396.0" layoutY="322.0" mnemonicParsing="false" onAction="#nextClick" prefHeight="26.0" prefWidth="67.0" text="Siguiente" />
+      <Button fx:id="nextBttn" layoutX="389.0" layoutY="338.0" mnemonicParsing="false" onAction="#nextClick" prefHeight="26.0" prefWidth="101.0" text="Siguiente" textFill="WHITE" />
+      <Label fx:id="priceLabel" layoutX="439.0" layoutY="282.0" prefHeight="33.0" prefWidth="222.0" text="FSDF" visible="false">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font></Label>
    </children>
 </AnchorPane>

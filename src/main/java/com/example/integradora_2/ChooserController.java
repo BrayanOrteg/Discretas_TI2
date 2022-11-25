@@ -9,6 +9,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -32,7 +33,8 @@ public class ChooserController implements Initializable{
 
     private  ObservableList<Node<Integer, Component>> result;
 
-
+    @FXML
+    private Label priceLabel;
 
 
     @FXML
@@ -57,13 +59,22 @@ public class ChooserController implements Initializable{
         status=0;
         ComponentName.setText("CPU");
 
+        nextBttn.setStyle("-fx-padding: 8 15 15 15;\n" +
+                "    -fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;\n" +
+                "    -fx-background-radius: 8;\n" +
+                "    -fx-background-color:\n" +
+                "    linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),\n" +
+                "        #9d4024,\n" +
+                "                #d86e3a,\n" +
+                "    radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c);\n" +
+                "    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );\n" +
+                "    -fx-font-weight: bold;\n" +
+                "    -fx-font-size: 1.1em;");
 
 
-        File file= new File("images\\armando.jpg");
 
-        Image img=new Image(file.getAbsolutePath());
-
-        gc.drawImage(img,0,0,canvas.getWidth(),canvas.getHeight());
+        gc.setFill(Color.GREY);
+        gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
 
 
         System.out.println("Hola");
@@ -78,9 +89,9 @@ public class ChooserController implements Initializable{
                     if (empty) {
                         setText(null);
                         setGraphic(null);
-                        setStyle("-fx-background-color: #a0887c");
+                        
                     } else {
-                        setStyle("-fx-background-color: #a0887c");
+                        
                         imageView.setImage(node.getObject().getImage());
                         imageView.setFitHeight(64);
                         imageView.setFitWidth(64);
@@ -124,7 +135,8 @@ public class ChooserController implements Initializable{
             for(int i=0; i<result.size(); i++){
                 cost+=result.get(i).getObject().getPrice();
             }
-            System.out.println(cost);
+            priceLabel.setVisible(true);
+            priceLabel.setText("El precio de tu build es de $"+cost);
             componentsView.setItems(result);
 
         }
@@ -147,10 +159,10 @@ public class ChooserController implements Initializable{
                     if (empty) {
                         setText(null);
                         setGraphic(null);
-                        setStyle("-fx-background-color: #a0887c");
+                        
                     } else {
 
-                        setStyle("-fx-background-color: #a0887c");
+                        
                         imageView.setImage(node.getObject().getImage());
                         imageView.setFitHeight(64);
                         imageView.setFitWidth(64);

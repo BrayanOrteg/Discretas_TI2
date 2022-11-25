@@ -395,5 +395,64 @@ public class MatrixGraph<K,T> {
         return graph1;
     }
 
+    private int[] parents= new int[100];
+
+    public int find(int node){
+
+        if (parents[node]==node){
+            return node;
+        }
+        return find(parents[node]);
+    }
+
+    public void unite(int iNode, int fNode ){
+
+        int parentX=find(iNode);
+        int parentY=find(fNode);
+
+        parents[parentX]=parentY;
+    }
+
+    public int krus(){
+
+        LinkedList <Edge<K,T>> edgesFinal= new LinkedList<>();
+        ArrayList <Edge<K,T>> edges2=new ArrayList<>();
+
+        for(int i=1; i<nodes.size();i++){
+            parents[i]=i;
+        }
+
+        for(int i=0;i<50;i++){
+            for(int e=0;e<50;e++){
+
+                if(noneDirectEdges[i][e]!=null){
+                    edges2.add(noneDirectEdges[i][e]);
+                }
+
+            }
+
+        }
+
+        Collections.sort(edges2, Comparator.comparing(Edge::getWeight));
+
+        int peso=0;
+        int node1;
+        int node2;
+
+        while(edges2.size()>=1){
+
+            node1= (Integer) edges2.get(0).getStart().getKey();
+            node2= (Integer) edges2.get(0).getEnd().getKey();
+
+            if(find(node1)!=find(node2)){
+                unite(node1,node2);
+                peso+=edges2.get(0).getWeight();
+                edgesFinal.add(edges2.get(0));
+            }
+            edges2.remove(0);
+        }
+        return peso;
+    }
+
 
 }
