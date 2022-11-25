@@ -1,7 +1,7 @@
 package com.example.integradora_2;
 import java.util.*;
 
-public class MatrixGraph<K,T> {
+public class MatrixGraph<K,T> implements IGraph <K,T>{
 
     private HashMap<K, Node<K, T>> nodes;
 
@@ -20,6 +20,7 @@ public class MatrixGraph<K,T> {
         noneDirectEdges = new Edge[50][50];
     }
 
+    @Override
     public boolean addNode(K key, T object) throws Exception {
         if (nodes.containsKey(key)) throw new Exception("There's already a node with this key");
         nodes.put(key, new Node<K, T>(key, object, nodes.size()));
@@ -27,6 +28,7 @@ public class MatrixGraph<K,T> {
         return true;
     }
 
+    @Override
     public String addRelation(K keyFrom, K keyTo, Integer weight) throws Exception {
 
         Node<K, T> nodeFrom = nodes.get(keyFrom);
@@ -41,6 +43,25 @@ public class MatrixGraph<K,T> {
 
             edges[nodeFrom.getMatrixPost()][nodeTo.getMatrixPost()] = edge;
 
+            return ("\nNow " + keyFrom.toString() + " has " + keyTo + " as relative with weight " + weight.toString());
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
+    }
+
+    public String addNoneDirecterRelation(K keyFrom, K keyTo, Integer weight) throws Exception {
+
+        Node<K, T> nodeFrom = nodes.get(keyFrom);
+
+        Node<K, T> nodeTo = nodes.get(keyTo);
+
+        if (nodeFrom == null || nodeTo == null) throw new Exception("We couldn't find both nodes");
+
+        try {
+            Edge<K, T> edge = new Edge<>(nodeFrom, nodeTo, weight);
+            Edge<K, T> inverseEdge = new Edge<>(nodeTo, nodeFrom, weight);
+
             noneDirectEdges[nodeFrom.getMatrixPost()][nodeTo.getMatrixPost()] = edge;
 
             noneDirectEdges[nodeTo.getMatrixPost()][nodeFrom.getMatrixPost()] = inverseEdge;
@@ -52,6 +73,7 @@ public class MatrixGraph<K,T> {
 
     }
 
+    @Override
     public ArrayList<Node<K,T>> dijkstra(K keyStart, K keyEnd){
 
         Node<K,T> start = nodes.get(keyStart);
@@ -133,15 +155,15 @@ public class MatrixGraph<K,T> {
 
     }
 
-    public String prim(K keyStart) throws Exception{
+    public ArrayList<Node<K,T>> prim(MatrixGraph<K,T> primGraph, K keyStart){
 
         HashMap<Integer,Node<K,T>> predecessors = new HashMap<>();
 
-        Node<K,T> start = nodes.get(keyStart);
+        Node<K,T> start = primGraph.getNode(keyStart);
 
-        if(start==null)throw new Exception("We couldn't find the node your looking for");
+        if(start==null) return null;
 
-        for(Node<K,T> n:nodes.values()){
+        for(Node<K,T> n:primGraph.getVertices()){
             n.setColor(Colors.WHITE);
             n.setPriority(null);
         }
@@ -152,14 +174,16 @@ public class MatrixGraph<K,T> {
 
         PriorityQueue<Node<K,T>> priorityQueue = new PriorityQueue<>();
 
-        priorityQueue.addAll(nodes.values());
+        priorityQueue.addAll(primGraph.getVertices());
+
+        Node<K,T> v1 = null;
 
         while(!priorityQueue.isEmpty()){
             Node<K,T> u = priorityQueue.poll();
 
-            for(int i=0; i< nodes.size(); i++){
+            for(int i=0; i< primGraph.getVertices().size(); i++){
 
-                Edge<K,T> edge = noneDirectEdges[u.getMatrixPost()][i];
+                Edge<K,T> edge = primGraph.getNoneDirectEdges()[u.getMatrixPost()][i];
 
                 Node<K,T> v = null;
 
@@ -170,14 +194,15 @@ public class MatrixGraph<K,T> {
                 }
 
                 if(v!=null && u.getColor()!=Colors.BLACK&&(v.getPriority()==null||
-                        noneDirectEdges[u.getMatrixPost()][v.getMatrixPost()].getWeight()<v.getPriority() &&
+                        primGraph.getNoneDirectEdges()[u.getMatrixPost()][v.getMatrixPost()].getWeight()<v.getPriority() &&
                                 u.getPredecessor()!=v)){
 
-                    v.setPriority(noneDirectEdges[u.getMatrixPost()][v.getMatrixPost()].getWeight());
+                    v.setPriority(primGraph.getNoneDirectEdges()[u.getMatrixPost()][v.getMatrixPost()].getWeight());
                     v.setPredecessor(u);
                     System.out.println(predecessors.size());
                     predecessors.put(v.getMatrixPost(),u);
                     System.out.println(v.getPredecessor().getKey()+" ahora es padre de " +v.getKey());
+                    v1=v;
 
                 }
 
@@ -186,7 +211,16 @@ public class MatrixGraph<K,T> {
             u.setColor(Colors.BLACK);
         }
 
-        return pathOrder(predecessors);
+        ArrayList<Node<K,T>> predecessorsList = new ArrayList<>();
+
+        for(Node<K,T> n:primGraph.getVertices()){
+            if(n.getPredecessor()!=null){
+                predecessorsList.add(n.getPredecessor());
+                predecessorsList.add(n);
+            }
+        }
+
+        return predecessorsList;
 
     }
 
@@ -452,6 +486,30 @@ public class MatrixGraph<K,T> {
             edges2.remove(0);
         }
         return peso;
+    }
+
+    public void removeNode(Node<K,T> n){
+        for(Edge<K,T> e : n.getRelations().values()){
+            edges[e.getStart().getMatrixPost()][e.getEnd().getMatrixPost()] = null;
+        }
+        nodes.remove(n);
+    }
+
+    public void removeRelation(Edge<K,T> edge){
+        edges[edge.getStart().getMatrixPost()][edge.getEnd().getMatrixPost()] = null;
+    }
+
+    public void removeNoneDirectedRelation(Edge<K,T> edge){
+        edges[edge.getStart().getMatrixPost()][edge.getEnd().getMatrixPost()] = null;
+        edges[edge.getEnd().getMatrixPost()][edge.getStart().getMatrixPost()] = null;
+    }
+
+    public Edge<K,T>[][] getEdges(){
+        return edges;
+    }
+
+    public Edge<K,T>[][] getNoneDirectEdges(){
+        return noneDirectEdges;
     }
 
 

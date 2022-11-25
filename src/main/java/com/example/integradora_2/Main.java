@@ -44,7 +44,7 @@ public class Main {
 
             System.out.println(graph.addRelation("Denver","New York", 1600));
 
-            System.out.println(graph.prim("Chicago"));
+            
 
              
 

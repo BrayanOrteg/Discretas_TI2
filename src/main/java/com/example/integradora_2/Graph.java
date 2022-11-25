@@ -4,7 +4,7 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.*;
 
-public class Graph<K,T> {
+public class Graph<K,T> implements IGraph<K,T> {
 
     private HashMap<K,Node<K,T>> nodes;
 
@@ -21,6 +21,7 @@ public class Graph<K,T> {
     }
 
     //añade el nodo
+
     public boolean addNode(K key,T object) throws Exception{
         if(nodes.containsKey(key)) throw new Exception("There's already a node with this key");
         nodes.put(key,new Node<K,T>(key,object, nodes.size()));
@@ -170,7 +171,6 @@ public class Graph<K,T> {
         priorityQueue.addAll(nodes.values());
 
         Node<K,T> u = null;
-        Node<K,T> v1 = null;
 
         while(!priorityQueue.isEmpty()){
             u = priorityQueue.poll();
@@ -180,19 +180,18 @@ public class Graph<K,T> {
                         u.getRelations().get(v).getWeight()<v.getPriority()) && u.getPredecessor()!=v){
                     v.setPriority(u.getRelations().get(v).getWeight());
                     v.setPredecessor(u);
-                    v1=v;
                 }
             }
             u.setColor(Colors.BLACK);
         }
 
-        ArrayList predecessors = new ArrayList<>();
+        ArrayList<Node<K,T>> predecessors = new ArrayList<>();
 
-        Node<K,T> predecessor = v1;
-
-        while(predecessor!=null){
-            predecessors.add(predecessor);
-            predecessor = predecessor.getPredecessor();
+        for(Node<K,T> n:primGraph.getVertices()){
+            if(n.getPredecessor()!=null){
+                predecessors.add(n.getPredecessor());
+                predecessors.add(n);
+            }
         }
 
         return predecessors;
@@ -489,12 +488,22 @@ public class Graph<K,T> {
         return graph1;
     }
 
+    public void removeNode(Node<K,T> n){
+        for(Edge<K,T> e : n.getRelations().values()){
+            removeRelation(e);
+            removeNoneDirectedRelation(e);
+            edges.remove(e);
+        }
+        nodes.remove(n);
+    }
+
     public void removeRelation(Edge<K,T> edge){
         edge.getStart().removeRelation(edge);
     }
 
     public void removeNoneDirectedRelation(Edge<K,T> edge){
         edge.getStart().removeNoneDirectedRelation(edge);
+        edge.getEnd().removeNoneDirectedRelation(edge);
     }
 
 
