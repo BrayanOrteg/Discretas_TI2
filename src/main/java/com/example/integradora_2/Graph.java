@@ -191,6 +191,10 @@ public class Graph<K,T> implements IGraph<K,T> {
             if(n.getPredecessor()!=null){
                 predecessors.add(n.getPredecessor());
                 predecessors.add(n);
+                //predecessors()
+                //i es padre de i+1, donde i debe ser un numero par incluyendo el 0
+                //predecessors.get(i).getRelations(predecessors.get(i+1)).getWeight();
+
             }
         }
 
@@ -226,7 +230,6 @@ public class Graph<K,T> implements IGraph<K,T> {
                         u.getNoneDirectedRelations().get(v).getWeight()<v.getPriority()) && u.getPredecessor()!=v){
                     v.setPriority(u.getNoneDirectedRelations().get(v).getWeight());
                     v.setPredecessor(u);
-                    System.out.println(v.getPredecessor().getKey()+" ahora es padre de " +v.getKey());
                 }
             }
             u.setColor(Colors.BLACK);
@@ -279,8 +282,6 @@ public class Graph<K,T> implements IGraph<K,T> {
             u.setColor(Colors.BLACK);
         }
 
-        boolean allBlack = true;
-
         ArrayList<Node<K,T>> solution = new ArrayList<>();
 
         for(Node<K,T>n:nodes.values()){
@@ -289,9 +290,50 @@ public class Graph<K,T> implements IGraph<K,T> {
             }
         }
 
-        System.out.println(allBlack);
-
         return solution;
+
+    }
+
+    public boolean BFSboolean(Node<K,T> start){
+
+        for(Node<K,T>u:nodes.values()){
+            if(!u.equals(start)){
+                u.setColor(Colors.WHITE);
+                u.setD(Integer.MAX_VALUE);
+                u.setPredecessor(null);
+            }
+        }
+
+        start.setColor(Colors.GREY);
+        start.setD(0);
+        start.setPredecessor(null);
+
+        LinkedList<Node<K,T>> queue = new LinkedList<>();
+
+        queue.add(start);
+
+        while(!queue.isEmpty()){
+            Node<K,T> u  = queue.poll();
+            for(Edge<K,T> e:u.getRelations().values()){
+                if(e.getEnd().getColor()==Colors.WHITE){
+                    e.getEnd().setColor(Colors.GREY);
+                    e.getEnd().setD(e.getStart().getD()+1);
+                    e.getEnd().setPredecessor(e.getStart());
+                    queue.add(e.getEnd());
+                }
+            }
+            u.setColor(Colors.BLACK);
+        }
+
+        boolean allBlack = true;
+
+        for(Node<K,T> n : nodes.values()){
+            if(n.getColor()!=Colors.BLACK){
+                allBlack=false;
+            }
+        }
+
+       return allBlack;
 
     }
 
@@ -304,6 +346,15 @@ public class Graph<K,T> implements IGraph<K,T> {
         return "No es conexo";
     }
 
+    public boolean isRelatedBoolean() {
+        boolean flag;
+        for (Node<K, T> n : nodes.values()) {
+            flag = BFSboolean(n);
+            if (flag) return true;
+        }
+        return false;
+    }
+
     public String isHardlyRelated(){
         Collection<Node<K,T>> flag;
         for(Node<K,T>n:nodes.values()){
@@ -311,6 +362,15 @@ public class Graph<K,T> implements IGraph<K,T> {
             if(flag==null) return "No es fuertemente Conexo";
         }
         return "Es fuertemente conexo";
+    }
+
+    public boolean isHardlyRelatedBoolean(){
+        boolean flag;
+        for(Node<K,T>n:nodes.values()){
+            flag = BFSboolean(n);
+            if(!flag) return false;
+        }
+        return true;
     }
 
     public int DFS(){
@@ -355,7 +415,7 @@ public class Graph<K,T> implements IGraph<K,T> {
 
     }
 
-    public String floydWarshall(){
+    public Integer[][] floydWarshall(){
 
         Integer[][] distances = new Integer[nodes.size()][nodes.size()];
 
@@ -410,7 +470,9 @@ public class Graph<K,T> implements IGraph<K,T> {
             out+="\n";
         }
 
-        return out;
+        System.out.println(out);
+
+        return distances;
 
     }
 
@@ -489,11 +551,11 @@ public class Graph<K,T> implements IGraph<K,T> {
     }
 
     public void removeNode(Node<K,T> n){
+
         for(Edge<K,T> e : n.getRelations().values()){
-            removeRelation(e);
             removeNoneDirectedRelation(e);
-            edges.remove(e);
         }
+        n.getRelations().clear();
         nodes.remove(n);
     }
 

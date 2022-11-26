@@ -77,7 +77,7 @@ public class ChooserController implements Initializable{
         gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
 
 
-        System.out.println("Hola");
+
 
         filter(ComponentType.CPU);
 
@@ -103,12 +103,12 @@ public class ChooserController implements Initializable{
 
 
 
-        System.out.println("Adios");
+
     }
 
     @FXML
     public void showInfo(){
-        System.out.println("holi");
+
     }
 
     @FXML

@@ -21,7 +21,7 @@ public interface IGraph <K,T> {
 
     public int krus();
 
-    public String floydWarshall();
+    public Integer[][] floydWarshall();
 
     public void unite(int iNode, int fNode );
 

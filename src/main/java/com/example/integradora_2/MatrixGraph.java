@@ -42,6 +42,8 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
             Edge<K, T> inverseEdge = new Edge<>(nodeTo, nodeFrom, weight);
 
             edges[nodeFrom.getMatrixPost()][nodeTo.getMatrixPost()] = edge;
+            noneDirectEdges[nodeFrom.getMatrixPost()][nodeTo.getMatrixPost()] = edge;
+            noneDirectEdges[nodeTo.getMatrixPost()][nodeFrom.getMatrixPost()] = inverseEdge;
 
             return ("\nNow " + keyFrom.toString() + " has " + keyTo + " as relative with weight " + weight.toString());
         } catch (Exception e) {
@@ -199,9 +201,7 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
 
                     v.setPriority(primGraph.getNoneDirectEdges()[u.getMatrixPost()][v.getMatrixPost()].getWeight());
                     v.setPredecessor(u);
-                    System.out.println(predecessors.size());
                     predecessors.put(v.getMatrixPost(),u);
-                    System.out.println(v.getPredecessor().getKey()+" ahora es padre de " +v.getKey());
                     v1=v;
 
                 }
@@ -219,6 +219,10 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
                 predecessorsList.add(n);
             }
         }
+
+        // Integer[][] ejemplo = graph.getEdges();
+        // i siempre es padre si es par o 0
+        // peso de i a i+1 = ejemplo[predecessorsList.get(i).getMatrixPost][predecessorsList.get(i+1).getMatrixPost]
 
         return predecessorsList;
 
@@ -273,7 +277,6 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
             u.setColor(Colors.BLACK);
         }
 
-        boolean allBlack = true;
 
         ArrayList<Node<K,T>> solution = new ArrayList<>();
 
@@ -283,9 +286,55 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
             }
         }
 
-        System.out.println(allBlack);
-
         return solution;
+
+    }
+
+    public boolean BFSboolean(Node<K,T> start){
+
+        for(Node<K,T> n:nodes.values()){
+            n.setColor(Colors.WHITE);
+            n.setPriority(null);
+            n.setD(Integer.MAX_VALUE);
+        }
+
+        start.setColor(Colors.GREY);
+        start.setD(0);
+        start.setPredecessor(null);
+
+        LinkedList<Node<K,T>> queue = new LinkedList<>();
+
+        queue.add(start);
+
+        while(!queue.isEmpty()){
+            Node<K,T> u  = queue.poll();
+
+            for(int i=0; i<50; i++){
+
+                Edge<K,T> e = edges[u.getMatrixPost()][i];
+
+                if(e!=null&&e.getEnd().getColor()==Colors.WHITE){
+
+                    e.getEnd().setColor(Colors.GREY);
+                    e.getEnd().setD(e.getStart().getD()+1);
+                    e.getEnd().setPredecessor(e.getStart());
+                    queue.add(e.getEnd());
+
+                }
+
+            }
+            u.setColor(Colors.BLACK);
+        }
+
+        boolean allBlack = true;
+
+        for(Node<K,T> n : nodes.values()){
+            if(n.getColor()!=Colors.BLACK){
+                allBlack=false;
+            }
+        }
+
+        return allBlack;
 
     }
 
@@ -298,6 +347,15 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
         return "No es conexo";
     }
 
+    public boolean isRelatedBoolean() {
+        boolean flag;
+        for (Node<K, T> n : nodes.values()) {
+            flag = BFSboolean(n);
+            if (flag) return true;
+        }
+        return false;
+    }
+
     public String isHardlyRelated(){
         Collection<Node<K,T>> flag;
         for(Node<K,T>n:nodes.values()){
@@ -305,6 +363,15 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
             if(flag==null) return "No es fuertemente Conexo";
         }
         return "Es fuertemente conexo";
+    }
+
+    public boolean isHardlyRelatedBoolean(){
+        boolean flag;
+        for(Node<K,T>n:nodes.values()){
+            flag = BFSboolean(n);
+            if(!flag) return false;
+        }
+        return true;
     }
 
     public int DFS(){
@@ -348,7 +415,7 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
 
     }
 
-    public String floydWarshall(){
+    public Integer[][] floydWarshall(){
 
         Integer[][] distances = new Integer[nodes.size()][nodes.size()];
 
@@ -401,7 +468,9 @@ public class MatrixGraph<K,T> implements IGraph <K,T>{
             out+="\n";
         }
 
-        return out;
+        System.out.println(out);
+
+        return distances;
 
     }
 

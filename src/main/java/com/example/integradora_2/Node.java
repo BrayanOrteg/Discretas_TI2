@@ -125,7 +125,7 @@ public class Node <K,T>implements Comparable<Node <K,T>>{
 
     @Override
     public int compareTo(Node<K, T> o) {
-        System.out.println("Estoy comparando " + key + " con " + o.getKey());
+
         if(priority==null)return 1;
         if(o.getPriority()==null)return -1;
         return priority.compareTo(o.getPriority());

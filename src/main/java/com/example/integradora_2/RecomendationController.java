@@ -119,7 +119,7 @@ public class RecomendationController implements Initializable{
 
 
 
-        System.out.println("Hola");
+
 
         init(cpuView, ComponentType.CPU);
 
@@ -262,7 +262,7 @@ public class RecomendationController implements Initializable{
 
 
 
-        System.out.println("Adios");
+
     }
 
 
@@ -415,7 +415,7 @@ public class RecomendationController implements Initializable{
             }
         }
 
-        System.out.println(filter.size());
+
 
         listView.setItems(FXCollections.observableArrayList(filter));
 
@@ -430,7 +430,7 @@ public class RecomendationController implements Initializable{
             }
         }
 
-        System.out.println(filter.size());
+
 
         listView.setItems(FXCollections.observableArrayList(filter));
 
