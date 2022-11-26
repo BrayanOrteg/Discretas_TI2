@@ -29,9 +29,10 @@ public class HelloController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gc = cs.getGraphicsContext2D();
 
-        File file= new File("images\\pc.jpg");
+        String uri="file:"+HelloApplication.class.getResource("pc.jpg").getPath();
+        Image img=new Image(uri);
 
-        Image img=new Image(file.getAbsolutePath());
+
 
         gc.drawImage(img,0,0,cs.getWidth(),cs.getHeight());
 

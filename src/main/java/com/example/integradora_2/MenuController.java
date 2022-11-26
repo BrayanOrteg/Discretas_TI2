@@ -34,10 +34,11 @@ public class MenuController implements Initializable {
         gc = cs2.getGraphicsContext2D();
 
 
+        String uri="file:"+HelloApplication.class.getResource("imagen2.jpg").getPath();
+        Image img=new Image(uri);
 
-        File file= new File("images\\imagen2.jpg");
 
-        Image img=new Image(file.getAbsolutePath());
+
 
         gc.drawImage(img,0,0,cs2.getWidth(),cs2.getHeight());
 
